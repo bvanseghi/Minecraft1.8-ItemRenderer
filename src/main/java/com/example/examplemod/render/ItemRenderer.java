@@ -57,7 +57,6 @@ public abstract class ItemRenderer implements IPerspectiveAwareModel, IBakedMode
 
             return super.handleItemState(originalModel, stack, world, entity);
         }
-
     }
 
     public ItemRenderer(ModelBase model, ResourceLocation resource)
@@ -71,52 +70,40 @@ public abstract class ItemRenderer implements IPerspectiveAwareModel, IBakedMode
     @Override
     public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType type)
     {
-        GlStateManager.pushMatrix();
-        {
-            this.renderPre(this.stack, this.entity, type);
-        }
-        GlStateManager.popMatrix();
+        this.renderPre(this.stack, this.entity, type);
 
-        GlStateManager.pushMatrix();
+        switch (type)
         {
-            switch (type)
-            {
-                case FIRST_PERSON_LEFT_HAND: {
-                    this.renderFirstPersonLeft(this.stack, this.entity, type);
-                }
-                    break;
-                case FIRST_PERSON_RIGHT_HAND: {
-                    this.renderFirstPersonRight(this.stack, this.entity, type);
-                }
-                    break;
-                case GUI: {
-                    this.renderInInventory(this.stack, this.entity, type);
-                }
-                    break;
-                case THIRD_PERSON_LEFT_HAND: {
-                    this.renderThirdPersonLeft(this.stack, this.entity, type);
-                }
-                    break;
-                case THIRD_PERSON_RIGHT_HAND: {
-                    this.renderThirdPersonRight(this.stack, this.entity, type);
-                }
-                    break;
-                case GROUND: {
-                    this.renderInWorld(this.stack, this.entity, type);
-                }
-                    break;
-
-                default:
-                    break;
+            case FIRST_PERSON_LEFT_HAND: {
+                this.renderFirstPersonLeft(this.stack, this.entity, type);
             }
-        }
-        GlStateManager.popMatrix();
+                break;
+            case FIRST_PERSON_RIGHT_HAND: {
+                this.renderFirstPersonRight(this.stack, this.entity, type);
+            }
+                break;
+            case GUI: {
+                this.renderInInventory(this.stack, this.entity, type);
+            }
+                break;
+            case THIRD_PERSON_LEFT_HAND: {
+                this.renderThirdPersonLeft(this.stack, this.entity, type);
+            }
+                break;
+            case THIRD_PERSON_RIGHT_HAND: {
+                this.renderThirdPersonRight(this.stack, this.entity, type);
+            }
+                break;
+            case GROUND: {
+                this.renderInWorld(this.stack, this.entity, type);
+            }
+                break;
 
-        GlStateManager.pushMatrix();
-        {
-            this.renderPre(this.stack, this.entity, type);
+            default:
+                break;
         }
-        GlStateManager.popMatrix();
+        
+        this.renderPost(this.stack, this.entity, type);
 
         return selfPair;
     }
